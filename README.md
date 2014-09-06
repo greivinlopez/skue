@@ -1,6 +1,8 @@
 Skuë
 ====
 
+![logo](https://raw.githubusercontent.com/greivinlopez/skue/master/skuelogo.png)
+
 Skuë is a GO package intended to facilitate the creation of better RESTful APIs.
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
