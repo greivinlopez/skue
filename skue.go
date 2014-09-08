@@ -23,7 +23,6 @@ package skue
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -55,19 +54,12 @@ const (
 	HEADER_XRateLimitRemaining           = "X-Rate-Limit-Remaining"
 )
 
-type Modeler interface {
-	CollectionName() string
-	Create() (err error)
-	Update() (err error)
-	Delete() (err error)
-}
-
+// SimpleMessage represents an HTTP simple response with
+// an HTTP status code and a response message
 type SimpleMessage struct {
 	Status  int
 	Message string
 }
-
-var ErrNotFound = errors.New("Not Found")
 
 // ToJson is a convenience method for writing a value in json encoding
 func ToJson(w http.ResponseWriter, statusCode int, value interface{}) {
@@ -98,49 +90,10 @@ func FromJson(r *http.Request, entityPointer interface{}) error {
 }
 
 // ServiceResponse is a convenience function to create an http response
-// encoded as JSON.
+// encoded as JSON with a simple message
 func ServiceResponse(w http.ResponseWriter, httpStatus int, message string) {
 	simpleMessage := &SimpleMessage{httpStatus, message}
 	ToJson(w, httpStatus, simpleMessage)
-}
-
-// ----------------------------------------------------------------------------
-// PERSISTANCE UTILS
-
-// Saves a model to the underlying storage
-func SaveModel(modeler Modeler, w http.ResponseWriter, r *http.Request) {
-	err := FromJson(r, &modeler)
-
-	if err != nil {
-		ServiceResponse(w, http.StatusBadRequest, fmt.Sprintf("Failed creating the owner: %v", err))
-	} else {
-		err = modeler.Create()
-		if err != nil {
-			ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Failed saving the object: %v", err))
-		} else {
-			ToJson(w, http.StatusCreated, modeler)
-		}
-	}
-}
-
-// Updates the given model in the underlying storage
-func UpdateModel(modeler Modeler, w http.ResponseWriter, r *http.Request) {
-	err := FromJson(r, &modeler)
-
-	if err != nil {
-		ServiceResponse(w, http.StatusBadRequest, fmt.Sprintf("Failed reading JSON from request: %v", err))
-	} else {
-		err = modeler.Update()
-		if err != nil {
-			if err == ErrNotFound {
-				ServiceResponse(w, http.StatusNotFound, "Item not found")
-			} else {
-				ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Failed updating the object: %v", err))
-			}
-		} else {
-			ServiceResponse(w, http.StatusOK, "Successfully updated")
-		}
-	}
 }
 
 // ----------------------------------------------------------------------------
@@ -150,4 +103,9 @@ func UpdateModel(modeler Modeler, w http.ResponseWriter, r *http.Request) {
 // It is a convenience handler to route all not allowed services
 func NotAllowed(w http.ResponseWriter) {
 	ServiceResponse(w, http.StatusMethodNotAllowed, "Method Not Allowed")
+}
+
+// NotFound handler will respond with a "404 Not Found" response
+func NotFound(w http.ResponseWriter) {
+	ServiceResponse(w, http.StatusNotFound, "Item not found")
 }
