@@ -69,7 +69,7 @@ func Create(modeler Modeler, w http.ResponseWriter, r *http.Request) {
 func Read(modeler Modeler, w http.ResponseWriter) {
 	err := modeler.Read()
 	if err != nil {
-		if err == ErrNotFound {
+		if err.Error() == "not found" {
 			NotFound(w)
 		} else {
 			ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Failed updating the item: %v", err))
@@ -92,7 +92,7 @@ func Update(modeler Modeler, w http.ResponseWriter, r *http.Request) {
 	} else {
 		err = modeler.Update()
 		if err != nil {
-			if err == ErrNotFound {
+			if err.Error() == "not found" {
 				NotFound(w)
 			} else {
 				ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Failed updating the item: %v", err))
@@ -112,7 +112,7 @@ func Update(modeler Modeler, w http.ResponseWriter, r *http.Request) {
 func Delete(modeler Modeler, w http.ResponseWriter, r *http.Request) {
 	err := modeler.Read()
 	if err != nil {
-		if err == ErrNotFound {
+		if err.Error() == "not found" {
 			NotFound(w)
 		} else {
 			ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Failed retrieving the item: %v", err))
