@@ -36,7 +36,7 @@ type Modeler interface {
 	Delete() (err error)
 }
 
-var ErrNotFound = errors.New("Not Found")
+var ErrNotFound = errors.New("not found")
 
 // ----------------------------------------------------------------------------
 // PERSISTANCE UTILS:  Handles modelers CRUD and interaction with HTTP
