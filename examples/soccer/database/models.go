@@ -50,7 +50,7 @@ type Player struct {
 // All the other fields will be empty at first.
 func NewPlayer(id string) *Player {
 	playerId := bson.NewObjectId()
-	if id != "" {
+	if id != "" && bson.IsObjectIdHex(id) {
 		playerId = bson.ObjectIdHex(id)
 	}
 	return &Player{
