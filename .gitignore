@@ -58,3 +58,7 @@ _cgo_export.*
 _testmain.go
 
 *.exe
+
+# Binaries #
+############
+examples/soccer/apiserver

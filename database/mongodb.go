@@ -31,7 +31,6 @@ import (
 
 var (
 	mgoSession *mgo.Session
-	dbname     string = "necesitotaxi"
 )
 
 var ErrNotFound = mgo.ErrNotFound
@@ -91,7 +90,7 @@ func (mongo *MongoDBPersistor) Drop(collectionName string) (err error) {
 	session := mongo.getSession()
 	defer session.Close()
 
-	c := session.DB(dbname).C(collectionName)
+	c := session.DB(mongo.database).C(collectionName)
 	_, err = c.RemoveAll(nil)
 	return
 }
@@ -102,7 +101,7 @@ func (mongo *MongoDBPersistor) Count(collectionName string) (n int, err error) {
 	session := mongo.getSession()
 	defer session.Close()
 
-	c := session.DB(dbname).C(collectionName)
+	c := session.DB(mongo.database).C(collectionName)
 	n, err = c.Count()
 	return
 }
@@ -130,7 +129,7 @@ func (mongo *MongoDBPersistor) Create(document interface{}, collection string) (
 	session := mongo.getSession()
 	defer session.Close()
 
-	c := session.DB(dbname).C(collection)
+	c := session.DB(mongo.database).C(collection)
 	err = c.Insert(document)
 	return
 }
@@ -167,7 +166,7 @@ func (mongo *MongoDBPersistor) Read(cache skue.MemoryCacher, document interface{
 	session := mongo.getSession()
 	defer session.Close()
 
-	c := session.DB(dbname).C(collection)
+	c := session.DB(mongo.database).C(collection)
 	query := bson.M{idfield: id}
 
 	err = c.Find(query).One(document)
@@ -189,7 +188,7 @@ func (mongo *MongoDBPersistor) Update(cache skue.MemoryCacher, document interfac
 	session := mongo.getSession()
 	defer session.Close()
 
-	c := session.DB(dbname).C(collection)
+	c := session.DB(mongo.database).C(collection)
 	query := bson.M{idfield: id}
 
 	err = c.Update(query, document)
@@ -214,7 +213,7 @@ func (mongo *MongoDBPersistor) Delete(cache skue.MemoryCacher, collection string
 	session := mongo.getSession()
 	defer session.Close()
 
-	c := session.DB(dbname).C(collection)
+	c := session.DB(mongo.database).C(collection)
 	query := bson.M{idfield: id}
 
 	err = c.Remove(query)

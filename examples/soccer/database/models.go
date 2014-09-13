@@ -18,12 +18,11 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-package main
+package models
 
 import (
 	"github.com/greivinlopez/skue"
-	//"github.com/greivinlopez/skue/database"
-	"gopkg.in/mgo.v2"
+	"github.com/greivinlopez/skue/database"
 	"gopkg.in/mgo.v2/bson"
 	//"os"
 )
@@ -41,13 +40,8 @@ type Player struct {
 	Foot        string
 }
 
-var (
-	mgoSession        *mgo.Session
-	playersCollection = "players"
-)
-
 // ----------------------------------------------------------------------------
-// 			MONGODB
+// 			PLAYER
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
@@ -71,26 +65,36 @@ func NewPlayer(id string) *Player {
 		Foot:        ""}
 }
 
+func (player *Player) Collection() string {
+	return "players"
+}
+
 // ----------------------------------------------------------------------------
 // 			skue.DatabasePersistor implementation
 // ----------------------------------------------------------------------------
 
 func (player *Player) Read(cache skue.MemoryCacher) (err error) {
-	//mongo := mongodb.New()
-	// Read(&stand, stand.CollectionName(), "_id", bson.ObjectIdHex(id))
-	return nil
+	mongo := mongodb.New()
+	err = mongo.Read(cache, &player, player.Collection(), "_id", player.Id)
+	return
 }
 
 func (player *Player) Create() (err error) {
-	return nil
+	mongo := mongodb.New()
+	err = mongo.Create(&player, player.Collection())
+	return
 }
 
 func (player *Player) Update(cache skue.MemoryCacher) (err error) {
-	return nil
+	mongo := mongodb.New()
+	err = mongo.Update(cache, &player, player.Collection(), "_id", player.Id)
+	return
 }
 
 func (player *Player) Delete(cache skue.MemoryCacher) (err error) {
-	return nil
+	mongo := mongodb.New()
+	err = mongo.Delete(cache, player.Collection(), "_id", player.Id)
+	return
 }
 
 // ----------------------------------------------------------------------------

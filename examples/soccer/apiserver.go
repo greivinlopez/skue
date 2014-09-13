@@ -21,6 +21,7 @@
 package main
 
 import (
+	"./database"
 	"github.com/greivinlopez/skue"
 	"gopkg.in/martini.v1"
 	"net/http"
@@ -35,7 +36,15 @@ var apiKey string
 
 // GET a Player resource by id
 func getPlayer(params martini.Params, w http.ResponseWriter, r *http.Request) {
-	//id := params["id"]
+	id := params["id"]
+	player := models.NewPlayer(id)
+	skue.Read(player, nil, w)
+}
+
+// POST a new Player resource
+func createPlayer(w http.ResponseWriter, r *http.Request) {
+	player := models.NewPlayer("")
+	skue.Create(player, w, r)
 }
 
 // ----------------------------------------------------------------------------
@@ -55,6 +64,7 @@ func main() {
 	})
 
 	// Citizens resource routing
+	m.Post("/teams/:team/players", createPlayer)
 	m.Get("/teams/:team/players/:id", getPlayer)
 	m.Any("/teams/:team/players/:id", skue.NotAllowed)
 
