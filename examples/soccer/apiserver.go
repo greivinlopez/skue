@@ -63,7 +63,7 @@ func main() {
 		}
 	})
 
-	// Citizens resource routing
+	// Player resource routing
 	m.Post("/teams/:team/players", createPlayer)
 	m.Get("/teams/:team/players/:id", getPlayer)
 	m.Any("/teams/:team/players/:id", skue.NotAllowed)
