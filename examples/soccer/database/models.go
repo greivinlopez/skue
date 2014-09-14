@@ -105,7 +105,7 @@ func (player *Player) Delete(cache skue.MemoryCacher) (err error) {
 	return
 }
 
-func (player *Player) List() (results []interface{}, err error) {
+func (player *Player) List() (results interface{}, err error) {
 	players := []Player{}
 	err = mongo.List(&players, player.Collection(), nil, 25)
 	return players, err

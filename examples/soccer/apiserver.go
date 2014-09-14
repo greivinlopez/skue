@@ -47,6 +47,12 @@ func createPlayer(w http.ResponseWriter, r *http.Request) {
 	skue.Create(player, w, r)
 }
 
+// GET the list of Player resources
+func listPlayers(w http.ResponseWriter, r *http.Request) {
+	player := models.NewPlayer("")
+	skue.List(player, w, r)
+}
+
 // ----------------------------------------------------------------------------
 
 func init() {
@@ -75,6 +81,7 @@ func main() {
 
 	// Player resource routing
 	m.Post("/teams/:team/players", createPlayer)
+	m.Get("/teams/:team/players", listPlayers)
 	m.Get("/teams/:team/players/:id", getPlayer)
 	m.Any("/teams/:team/players/:id", skue.NotAllowed)
 
