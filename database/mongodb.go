@@ -137,6 +137,17 @@ func getKey(collection string, id interface{}) (key string, err error) {
 	return "", errors.New("Unrecognized type for cache key")
 }
 
+// Gets a list of documents from the given collection
+func (mongo *MongoDBPersistor) List(documents []interface{}, collection string, query interface{}, limit int) (err error) {
+	session := mongo.getSession()
+	defer session.Close()
+
+	c := session.DB(mongo.database).C(collection)
+
+	err = c.Find(query).Limit(limit).All(documents)
+	return
+}
+
 // Read retrieves the document associated with the given collection+id trying the given
 // memory cache first.
 func (mongo *MongoDBPersistor) Read(cache skue.MemoryCacher, document interface{}, collection string, idfield string, id interface{}) (err error) {

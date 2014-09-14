@@ -47,6 +47,7 @@ type DatabasePersistor interface {
 	Read(cache MemoryCacher) (err error)
 	Update(cache MemoryCacher) (err error)
 	Delete(cache MemoryCacher) (err error)
+	List() (result []interface{}, err error)
 }
 
 var ErrNotFound = errors.New("not found")
@@ -137,5 +138,16 @@ func Delete(model DatabasePersistor, cache MemoryCacher, w http.ResponseWriter, 
 		} else {
 			ServiceResponse(w, http.StatusOK, "Successfully deleted")
 		}
+	}
+}
+
+// Returns the list of elements associated to the givem model in the underlying storage.
+// Writes to the http writer accordingly following the REST architectural style.
+func List(model DatabasePersistor, w http.ResponseWriter, r *http.Request) {
+	result, err := model.List()
+	if err != nil {
+		ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error requesting the list: %v", err))
+	} else {
+		ToJson(w, http.StatusOK, result)
 	}
 }
