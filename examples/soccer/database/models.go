@@ -24,7 +24,14 @@ import (
 	"github.com/greivinlopez/skue"
 	"github.com/greivinlopez/skue/database"
 	"gopkg.in/mgo.v2/bson"
-	//"os"
+)
+
+var (
+	Address  string // The address to reach the MongoDB server
+	Username string // The username to connect with the MongoDB server
+	Password string // The password of the MongoDB user
+	Database string // The name of the database to store the models
+	mongo    *mongodb.MongoDBPersistor
 )
 
 // Player represents a soccer player.
@@ -38,6 +45,11 @@ type Player struct {
 	Height      string
 	Weight      string
 	Foot        string
+}
+
+// Creates a MongoDB persistor to interact with the database
+func CreateMongoPersistor() {
+	mongo = mongodb.New(Address, Username, Password, Database)
 }
 
 // ----------------------------------------------------------------------------
@@ -74,25 +86,21 @@ func (player *Player) Collection() string {
 // ----------------------------------------------------------------------------
 
 func (player *Player) Read(cache skue.MemoryCacher) (err error) {
-	mongo := mongodb.New()
 	err = mongo.Read(cache, &player, player.Collection(), "_id", player.Id)
 	return
 }
 
 func (player *Player) Create() (err error) {
-	mongo := mongodb.New()
 	err = mongo.Create(&player, player.Collection())
 	return
 }
 
 func (player *Player) Update(cache skue.MemoryCacher) (err error) {
-	mongo := mongodb.New()
 	err = mongo.Update(cache, &player, player.Collection(), "_id", player.Id)
 	return
 }
 
 func (player *Player) Delete(cache skue.MemoryCacher) (err error) {
-	mongo := mongodb.New()
 	err = mongo.Delete(cache, player.Collection(), "_id", player.Id)
 	return
 }

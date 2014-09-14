@@ -55,10 +55,11 @@ func init() {
 
 	// Retrieve the API security Key
 	apiKey = os.Getenv("SOCCER_API_KEY")
-	/*address:  os.Getenv("MG_DB_ADDRESS"),
-	username: os.Getenv("MG_DB_USER"),
-	password: os.Getenv("MG_DB_PASS"),
-	database: os.Getenv("MG_DB_DBNAME")*/
+	models.Address = os.Getenv("MG_DB_ADDRESS")
+	models.Username = os.Getenv("MG_DB_USER")
+	models.Password = os.Getenv("MG_DB_PASS")
+	models.Database = os.Getenv("MG_DB_DBNAME")
+	models.CreateMongoPersistor()
 }
 
 func main() {
