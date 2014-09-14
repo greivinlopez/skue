@@ -138,7 +138,7 @@ func getKey(collection string, id interface{}) (key string, err error) {
 }
 
 // Gets a list of documents from the given collection
-func (mongo *MongoDBPersistor) List(documents []interface{}, collection string, query interface{}, limit int) (err error) {
+func (mongo *MongoDBPersistor) List(documents interface{}, collection string, query interface{}, limit int) (err error) {
 	session := mongo.getSession()
 	defer session.Close()
 

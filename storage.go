@@ -47,7 +47,7 @@ type DatabasePersistor interface {
 	Read(cache MemoryCacher) (err error)
 	Update(cache MemoryCacher) (err error)
 	Delete(cache MemoryCacher) (err error)
-	List() (result []interface{}, err error)
+	List() (result interface{}, err error)
 }
 
 var ErrNotFound = errors.New("not found")
