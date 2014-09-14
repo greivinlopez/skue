@@ -25,7 +25,6 @@ import (
 	"github.com/greivinlopez/skue"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"os"
 	"strings"
 )
 
@@ -44,28 +43,18 @@ type MongoDBPersistor struct {
 
 // New creates a new MongoDBPersistor.
 // This persistor will interact with a MongoDB server.
-// The parameters for the connection to the server must
-// be set by you on the running machine according to:
-//
-// 		http://12factor.net/config
-//
-// The environment variables you need to set are as follows:
-// MG_DB_ADDRESS= The address where your MongoDB server is running
-// MG_DB_USER= The username for your connection user
-// MG_DB_PASS= The password for your connection user
-// MG_DB_DBNAME= The name of the database to work with
-//
-// For example put this on your ~/.profile file:
-// export MG_DB_ADDRESS="localhost"
-// export MG_DB_USER="your-db-user"
-// export MG_DB_PASS="your-db-password"
-// export MG_DB_DBNAME="your-db-name"
-func New() *MongoDBPersistor {
+// The parameters represents the values to dial the server.
+// Dial information to connect with your MongoDB server:
+// - address= The address where your MongoDB server is running
+// - username= The username for your connection user
+// - password= The password for your connection user
+// - database= The name of the database to work with
+func New(address, username, password, database string) *MongoDBPersistor {
 	return &MongoDBPersistor{
-		address:  os.Getenv("MG_DB_ADDRESS"),
-		username: os.Getenv("MG_DB_USER"),
-		password: os.Getenv("MG_DB_PASS"),
-		database: os.Getenv("MG_DB_DBNAME")}
+		address:  address,
+		username: username,
+		password: password,
+		database: database}
 }
 
 // GetSession attempts to establish a connection with the server
@@ -73,6 +62,7 @@ func (mongo *MongoDBPersistor) getSession() *mgo.Session {
 	if mgoSession == nil {
 		var err error
 		dialInfo := mgo.DialInfo{}
+		// TODO: Should change this to support multiple addresses.
 		dialInfo.Addrs = []string{mongo.address}
 		dialInfo.Username = mongo.username
 		dialInfo.Password = mongo.password

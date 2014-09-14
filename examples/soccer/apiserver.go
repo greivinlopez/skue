@@ -49,10 +49,19 @@ func createPlayer(w http.ResponseWriter, r *http.Request) {
 
 // ----------------------------------------------------------------------------
 
-func main() {
-	// Retrieve the API security Key from an environment variable
-	apiKey = os.Getenv("SOCCER_API_KEY")
+func init() {
+	// All configuration and settings are loaded from environment variables
+	// Following the practices from: http://12factor.net/config
 
+	// Retrieve the API security Key
+	apiKey = os.Getenv("SOCCER_API_KEY")
+	/*address:  os.Getenv("MG_DB_ADDRESS"),
+	username: os.Getenv("MG_DB_USER"),
+	password: os.Getenv("MG_DB_PASS"),
+	database: os.Getenv("MG_DB_DBNAME")*/
+}
+
+func main() {
 	// This server uses the wonderful martini package: https://github.com/go-martini/martini
 	m := martini.Classic()
 
