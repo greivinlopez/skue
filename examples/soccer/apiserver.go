@@ -34,6 +34,9 @@ var apiKey string
 // 			API Resource Handlers
 // ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// PLAYER
+
 // GET a Player resource by id
 func getPlayer(params martini.Params, w http.ResponseWriter, r *http.Request) {
 	id := params["id"]
@@ -51,6 +54,28 @@ func createPlayer(w http.ResponseWriter, r *http.Request) {
 func listPlayers(w http.ResponseWriter, r *http.Request) {
 	player := models.NewPlayer("")
 	skue.List(player, w, r)
+}
+
+// ----------------------------------------------------------------------------
+// TEAM
+
+// GET a Team resource by id
+func getTeam(params martini.Params, w http.ResponseWriter, r *http.Request) {
+	id := params["team"]
+	team := models.NewTeam(id)
+	skue.Read(team, nil, w)
+}
+
+// POST a new Team resource
+func createTeam(w http.ResponseWriter, r *http.Request) {
+	team := models.NewTeam("")
+	skue.Create(team, w, r)
+}
+
+// GET the list of Team resources
+func listTeams(w http.ResponseWriter, r *http.Request) {
+	team := models.NewTeam("")
+	skue.List(team, w, r)
 }
 
 // ----------------------------------------------------------------------------
@@ -79,10 +104,18 @@ func main() {
 		}
 	})
 
+	// Team resource routing
+	m.Post("/teams", createTeam)
+	m.Get("/teams", listTeams)
+	m.Get("/teams/:team", getTeam)
+	m.Any("/teams", skue.NotAllowed)
+	m.Any("/teams/:team", skue.NotAllowed)
+
 	// Player resource routing
 	m.Post("/teams/:team/players", createPlayer)
 	m.Get("/teams/:team/players", listPlayers)
 	m.Get("/teams/:team/players/:id", getPlayer)
+	m.Any("/teams/:team/players", skue.NotAllowed)
 	m.Any("/teams/:team/players/:id", skue.NotAllowed)
 
 	// Running on an unassigned port by IANA: http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers

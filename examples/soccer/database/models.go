@@ -34,6 +34,14 @@ var (
 	mongo    *mongodb.MongoDBPersistor
 )
 
+// Creates a MongoDB persistor to interact with the database
+func CreateMongoPersistor() {
+	mongo = mongodb.New(Address, Username, Password, Database)
+}
+
+// ----------------------------------------------------------------------------
+// 			PLAYER
+// ----------------------------------------------------------------------------
 // Player represents a soccer player.
 type Player struct {
 	Id          bson.ObjectId `json:"Id" bson:"_id"`
@@ -46,15 +54,6 @@ type Player struct {
 	Weight      string
 	Foot        string
 }
-
-// Creates a MongoDB persistor to interact with the database
-func CreateMongoPersistor() {
-	mongo = mongodb.New(Address, Username, Password, Database)
-}
-
-// ----------------------------------------------------------------------------
-// 			PLAYER
-// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 
@@ -82,7 +81,7 @@ func (player *Player) Collection() string {
 }
 
 // ----------------------------------------------------------------------------
-// 			skue.DatabasePersistor implementation
+// 			Player implementation of skue.DatabasePersistor
 // ----------------------------------------------------------------------------
 
 func (player *Player) Read(cache skue.MemoryCacher) (err error) {
@@ -109,6 +108,73 @@ func (player *Player) List() (results interface{}, err error) {
 	players := []Player{}
 	err = mongo.List(&players, player.Collection(), nil, 25)
 	return players, err
+}
+
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// 			TEAM
+// ----------------------------------------------------------------------------
+// Team represents a soccer team.
+type Team struct {
+	TeamId       string
+	Name         string
+	CompleteName string
+	Logo         string
+	Country      string
+	Founded      int
+	Website      string
+	Players      []Player
+}
+
+// ----------------------------------------------------------------------------
+
+// NewPlayer creates a new empty Player object with the provided id.
+// All the other fields will be empty at first.
+func NewTeam(id string) *Team {
+	return &Team{
+		TeamId:       id,
+		Name:         "",
+		CompleteName: "",
+		Logo:         "",
+		Country:      "",
+		Founded:      0,
+		Website:      "",
+		Players:      []Player{}}
+}
+
+func (team *Team) Collection() string {
+	return "teams"
+}
+
+// ----------------------------------------------------------------------------
+// 			Team implementation of skue.DatabasePersistor
+// ----------------------------------------------------------------------------
+
+func (team *Team) Read(cache skue.MemoryCacher) (err error) {
+	err = mongo.Read(cache, &team, team.Collection(), "teamid", team.TeamId)
+	return
+}
+
+func (team *Team) Create() (err error) {
+	err = mongo.Create(&team, team.Collection())
+	return
+}
+
+func (team *Team) Update(cache skue.MemoryCacher) (err error) {
+	err = mongo.Update(cache, &team, team.Collection(), "teamid", team.TeamId)
+	return
+}
+
+func (team *Team) Delete(cache skue.MemoryCacher) (err error) {
+	err = mongo.Delete(cache, team.Collection(), "teamid", team.TeamId)
+	return
+}
+
+func (team *Team) List() (results interface{}, err error) {
+	teams := []Team{}
+	err = mongo.List(&teams, team.Collection(), nil, 25)
+	return teams, err
 }
 
 // ----------------------------------------------------------------------------
