@@ -82,6 +82,7 @@ func Produce(producer Producer, w http.ResponseWriter, r *http.Request, status i
 		if !strings.Contains(acceptEncoding, producer.MimeType()) {
 			w.WriteHeader(http.StatusNotAcceptable)
 			io.WriteString(w, "Not Acceptable")
+			return
 		}
 	}
 	producer.Out(w, status, value)
@@ -93,6 +94,7 @@ func Consume(consumer Consumer, w http.ResponseWriter, r *http.Request, value in
 	if !strings.Contains(contentType, consumer.MimeType()) {
 		w.WriteHeader(http.StatusUnsupportedMediaType)
 		io.WriteString(w, "Unsupported Media Type")
+		return nil
 	}
 	return consumer.In(r, value)
 }
