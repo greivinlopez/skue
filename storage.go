@@ -162,6 +162,6 @@ func List(view ViewLayer, model DatabasePersistor, w http.ResponseWriter, r *htt
 	if err != nil {
 		ServiceResponse(view.Producer, w, r, http.StatusInternalServerError, fmt.Sprintf("Error requesting the list: %v", err))
 	} else {
-		Produce(view.Producer, w, r, http.StatusOK, result)
+		view.Producer.Out(w, http.StatusOK, result)
 	}
 }
