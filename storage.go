@@ -52,6 +52,20 @@ type DatabasePersistor interface {
 
 var ErrNotFound = errors.New("not found")
 
+// ViewLayer represents a consumer and a producer to decode and encode
+// Http requests and responses in a certain MIME type
+type ViewLayer struct {
+	Producer Producer
+	Consumer Consumer
+}
+
+func NewViewLayer(producer Producer, consumer Consumer) *ViewLayer {
+	return &ViewLayer{
+		Producer: producer,
+		Consumer: consumer,
+	}
+}
+
 // ----------------------------------------------------------------------------
 // PERSISTANCE UTILS:  Handles models CRUD and interaction with HTTP
 
@@ -60,17 +74,17 @@ var ErrNotFound = errors.New("not found")
 // The model is constructed from the JSON body of the given request.
 // Writes to the http writer according to what happens with the model
 // following the REST architectural style.
-func Create(model DatabasePersistor, w http.ResponseWriter, r *http.Request) {
-	err := FromJson(r, &model)
+func Create(view ViewLayer, model DatabasePersistor, w http.ResponseWriter, r *http.Request) {
+	err := view.Consumer.In(r, &model)
 
 	if err != nil {
-		ServiceResponse(w, http.StatusBadRequest, fmt.Sprintf("Failed reading JSON from request: %v", err))
+		ServiceResponse(view.Producer, w, r, http.StatusBadRequest, fmt.Sprintf("Failed reading from request: %v", err))
 	} else {
 		err = model.Create()
 		if err != nil {
-			ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Failed saving the item: %v", err))
+			ServiceResponse(view.Producer, w, r, http.StatusInternalServerError, fmt.Sprintf("Failed saving the item: %v", err))
 		} else {
-			ToJson(w, http.StatusCreated, model)
+			Produce(view.Producer, w, r, http.StatusCreated, model)
 		}
 	}
 }
@@ -80,16 +94,16 @@ func Create(model DatabasePersistor, w http.ResponseWriter, r *http.Request) {
 // it knows it's id.
 // Writes to the http writer according to what happens with the model
 // following the REST architectural style.
-func Read(model DatabasePersistor, cache MemoryCacher, w http.ResponseWriter) {
+func Read(view ViewLayer, model DatabasePersistor, cache MemoryCacher, w http.ResponseWriter, r *http.Request) {
 	err := model.Read(cache)
 	if err != nil {
 		if err.Error() == "not found" {
-			NotFound(w)
+			NotFound(view.Producer, w, r)
 		} else {
-			ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Failed updating the item: %v", err))
+			ServiceResponse(view.Producer, w, r, http.StatusInternalServerError, fmt.Sprintf("Failed reading the item: %v", err))
 		}
 	} else {
-		ToJson(w, http.StatusOK, model)
+		view.Producer.Out(w, http.StatusOK, model)
 	}
 }
 
@@ -98,21 +112,21 @@ func Read(model DatabasePersistor, cache MemoryCacher, w http.ResponseWriter) {
 // The model is constructed from the JSON body of the given request.
 // Writes to the http writer according to what happens with the model
 // following the REST architectural style.
-func Update(model DatabasePersistor, cache MemoryCacher, w http.ResponseWriter, r *http.Request) {
-	err := FromJson(r, &model)
+func Update(view ViewLayer, model DatabasePersistor, cache MemoryCacher, w http.ResponseWriter, r *http.Request) {
+	err := view.Consumer.In(r, &model)
 
 	if err != nil {
-		ServiceResponse(w, http.StatusBadRequest, fmt.Sprintf("Failed reading JSON from request: %v", err))
+		ServiceResponse(view.Producer, w, r, http.StatusBadRequest, fmt.Sprintf("Failed reading from request: %v", err))
 	} else {
 		err = model.Update(cache)
 		if err != nil {
 			if err.Error() == "not found" {
-				NotFound(w)
+				NotFound(view.Producer, w, r)
 			} else {
-				ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Failed updating the item: %v", err))
+				ServiceResponse(view.Producer, w, r, http.StatusInternalServerError, fmt.Sprintf("Failed updating the item: %v", err))
 			}
 		} else {
-			ServiceResponse(w, http.StatusOK, "Successfully updated")
+			ServiceResponse(view.Producer, w, r, http.StatusOK, "Successfully updated")
 		}
 	}
 }
@@ -123,31 +137,31 @@ func Update(model DatabasePersistor, cache MemoryCacher, w http.ResponseWriter, 
 // If the model is created successfully then it calls the Delete method.
 // Writes to the http writer according to what happens with the model
 // following the REST architectural style.
-func Delete(model DatabasePersistor, cache MemoryCacher, w http.ResponseWriter, r *http.Request) {
+func Delete(view ViewLayer, model DatabasePersistor, cache MemoryCacher, w http.ResponseWriter, r *http.Request) {
 	err := model.Read(cache)
 	if err != nil {
 		if err.Error() == "not found" {
-			NotFound(w)
+			NotFound(view.Producer, w, r)
 		} else {
-			ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Failed retrieving the item: %v", err))
+			ServiceResponse(view.Producer, w, r, http.StatusInternalServerError, fmt.Sprintf("Failed retrieving the item: %v", err))
 		}
 	} else {
 		err = model.Delete(cache)
 		if err != nil {
-			ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Failed deleting the item: %v", err))
+			ServiceResponse(view.Producer, w, r, http.StatusInternalServerError, fmt.Sprintf("Failed deleting the item: %v", err))
 		} else {
-			ServiceResponse(w, http.StatusOK, "Successfully deleted")
+			ServiceResponse(view.Producer, w, r, http.StatusOK, "Successfully deleted")
 		}
 	}
 }
 
 // Returns the list of elements associated to the givem model in the underlying storage.
 // Writes to the http writer accordingly following the REST architectural style.
-func List(model DatabasePersistor, w http.ResponseWriter, r *http.Request) {
+func List(view ViewLayer, model DatabasePersistor, w http.ResponseWriter, r *http.Request) {
 	result, err := model.List()
 	if err != nil {
-		ServiceResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error requesting the list: %v", err))
+		ServiceResponse(view.Producer, w, r, http.StatusInternalServerError, fmt.Sprintf("Error requesting the list: %v", err))
 	} else {
-		ToJson(w, http.StatusOK, result)
+		view.Producer.Out(w, http.StatusOK, result)
 	}
 }

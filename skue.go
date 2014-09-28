@@ -61,6 +61,45 @@ type SimpleMessage struct {
 	Message string
 }
 
+// Producer is intended to be an encoder that writes a value to http writers
+// for a particular MIME type.
+type Producer interface {
+	MimeType() string
+	Out(w http.ResponseWriter, statusCode int, value interface{})
+}
+
+// Consumer is intended to be a decoder of HTTP requests that uses a particular
+// MIME type to decode the intended object into a value.
+type Consumer interface {
+	MimeType() string
+	In(r *http.Request, value interface{}) error
+}
+
+func Produce(producer Producer, w http.ResponseWriter, r *http.Request, status int, value interface{}) {
+	acceptEncoding := r.Header.Get(HEADER_AcceptEncoding)
+	// According to HTTP/1.1 protocol section 14.1 about Accept header field
+	// "If an Accept header field is present, and if the server cannot send
+	// a response which is acceptable according to the combined Accept field
+	// value, then the server SHOULD send a 406 (not acceptable) response."
+	if acceptEncoding != "" && !strings.Contains(acceptEncoding, "*/*") {
+		if !strings.Contains(acceptEncoding, producer.MimeType()) {
+			w.WriteHeader(http.StatusNotAcceptable)
+			io.WriteString(w, "Not Acceptable")
+		}
+	}
+	producer.Out(w, status, value)
+}
+
+func Consume(consumer Consumer, w http.ResponseWriter, r *http.Request, value interface{}) {
+	contentType := r.Header.Get(HEADER_ContentType)
+	// According to HTTP/1.1 protocol section 14.17 about Content-Type header
+	if !strings.Contains(contentType, consumer.MimeType()) {
+		w.WriteHeader(http.StatusUnsupportedMediaType)
+		io.WriteString(w, "Unsupported Media Type")
+	}
+	consumer.In(r, value)
+}
+
 // ToJson is a convenience method for writing a value in json encoding
 func ToJson(w http.ResponseWriter, statusCode int, value interface{}) {
 	output, err := json.MarshalIndent(value, " ", " ")
@@ -91,9 +130,9 @@ func FromJson(r *http.Request, entityPointer interface{}) error {
 
 // ServiceResponse is a convenience function to create an http response
 // encoded as JSON with a simple message
-func ServiceResponse(w http.ResponseWriter, httpStatus int, message string) {
+func ServiceResponse(producer Producer, w http.ResponseWriter, r *http.Request, httpStatus int, message string) {
 	simpleMessage := &SimpleMessage{httpStatus, message}
-	ToJson(w, httpStatus, simpleMessage)
+	Produce(producer, w, r, httpStatus, simpleMessage)
 }
 
 // ----------------------------------------------------------------------------
@@ -101,11 +140,11 @@ func ServiceResponse(w http.ResponseWriter, httpStatus int, message string) {
 
 // NotAllowed handler will response with a "405 Method Not Allowed" response
 // It is a convenience handler to route all not allowed services
-func NotAllowed(w http.ResponseWriter) {
-	ServiceResponse(w, http.StatusMethodNotAllowed, "Method Not Allowed")
+func NotAllowed(producer Producer, w http.ResponseWriter, r *http.Request) {
+	ServiceResponse(producer, w, r, http.StatusMethodNotAllowed, "Method Not Allowed")
 }
 
 // NotFound handler will respond with a "404 Not Found" response
-func NotFound(w http.ResponseWriter) {
-	ServiceResponse(w, http.StatusNotFound, "Item not found")
+func NotFound(producer Producer, w http.ResponseWriter, r *http.Request) {
+	ServiceResponse(producer, w, r, http.StatusNotFound, "Item not found")
 }
