@@ -23,6 +23,7 @@ package main
 import (
 	"./database"
 	"github.com/greivinlopez/skue"
+	"github.com/greivinlopez/skue/views"
 	"gopkg.in/martini.v1"
 	"net/http"
 	"os"
@@ -44,20 +45,19 @@ var (
 func getPlayer(params martini.Params, w http.ResponseWriter, r *http.Request) {
 	id := params["id"]
 	player := models.NewPlayer(id)
-	skue.Read(player, nil, w)
-	skue.Read(view, model, cache, w, r)
+	skue.Read(view, player, nil, w, r)
 }
 
 // POST a new Player resource
 func createPlayer(w http.ResponseWriter, r *http.Request) {
 	player := models.NewPlayer("")
-	skue.Create(player, w, r)
+	skue.Create(view, player, w, r)
 }
 
 // GET the list of Player resources
 func listPlayers(w http.ResponseWriter, r *http.Request) {
 	player := models.NewPlayer("")
-	skue.List(player, w, r)
+	skue.List(view, player, w, r)
 }
 
 // ----------------------------------------------------------------------------
@@ -67,19 +67,19 @@ func listPlayers(w http.ResponseWriter, r *http.Request) {
 func getTeam(params martini.Params, w http.ResponseWriter, r *http.Request) {
 	id := params["team"]
 	team := models.NewTeam(id)
-	skue.Read(team, nil, w)
+	skue.Read(view, team, nil, w, r)
 }
 
 // POST a new Team resource
 func createTeam(w http.ResponseWriter, r *http.Request) {
 	team := models.NewTeam("")
-	skue.Create(team, w, r)
+	skue.Create(view, team, w, r)
 }
 
 // GET the list of Team resources
 func listTeams(w http.ResponseWriter, r *http.Request) {
 	team := models.NewTeam("")
-	skue.List(team, w, r)
+	skue.List(view, team, w, r)
 }
 
 // ----------------------------------------------------------------------------
@@ -95,6 +95,9 @@ func init() {
 	models.Password = os.Getenv("MG_DB_PASS")
 	models.Database = os.Getenv("MG_DB_DBNAME")
 	models.CreateMongoPersistor()
+
+	// Let's use a JSON view layer: Consume from JSON and produce JSON content.
+	view = *views.NewJSONView()
 }
 
 func main() {
@@ -104,7 +107,7 @@ func main() {
 	// Validate an API key for request authorization
 	m.Use(func(res http.ResponseWriter, req *http.Request) {
 		if req.Header.Get("X-API-KEY") != apiKey {
-			skue.ServiceResponse(res, http.StatusUnauthorized, "You are not authorized to access this resource.")
+			skue.ServiceResponse(view.Producer, res, req, http.StatusUnauthorized, "You are not authorized to access this resource.")
 		}
 	})
 
