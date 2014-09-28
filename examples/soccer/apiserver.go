@@ -28,7 +28,10 @@ import (
 	"os"
 )
 
-var apiKey string
+var (
+	apiKey string
+	view   skue.ViewLayer
+)
 
 // ----------------------------------------------------------------------------
 // 			API Resource Handlers
@@ -42,6 +45,7 @@ func getPlayer(params martini.Params, w http.ResponseWriter, r *http.Request) {
 	id := params["id"]
 	player := models.NewPlayer(id)
 	skue.Read(player, nil, w)
+	skue.Read(view, model, cache, w, r)
 }
 
 // POST a new Player resource

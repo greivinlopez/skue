@@ -47,3 +47,7 @@ func (consumer JSONConsumer) In(r *http.Request, value interface{}) error {
 }
 
 type JSONView skue.ViewLayer
+
+func NewJSONView() *skue.ViewLayer {
+	return skue.NewViewLayer(JSONProducer{}, JSONConsumer{})
+}
