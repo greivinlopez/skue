@@ -75,7 +75,7 @@ func NewViewLayer(producer Producer, consumer Consumer) *ViewLayer {
 // Writes to the http writer according to what happens with the model
 // following the REST architectural style.
 func Create(view ViewLayer, model DatabasePersistor, w http.ResponseWriter, r *http.Request) {
-	err := Consume(view.Consumer, w, r, &model)
+	err := view.Consumer.In(r, &model)
 
 	if err != nil {
 		ServiceResponse(view.Producer, w, r, http.StatusBadRequest, fmt.Sprintf("Failed reading from request: %v", err))
@@ -103,7 +103,7 @@ func Read(view ViewLayer, model DatabasePersistor, cache MemoryCacher, w http.Re
 			ServiceResponse(view.Producer, w, r, http.StatusInternalServerError, fmt.Sprintf("Failed reading the item: %v", err))
 		}
 	} else {
-		Produce(view.Producer, w, r, http.StatusOK, model)
+		view.Producer.Out(w, http.StatusOK, model)
 	}
 }
 
@@ -113,7 +113,7 @@ func Read(view ViewLayer, model DatabasePersistor, cache MemoryCacher, w http.Re
 // Writes to the http writer according to what happens with the model
 // following the REST architectural style.
 func Update(view ViewLayer, model DatabasePersistor, cache MemoryCacher, w http.ResponseWriter, r *http.Request) {
-	err := Consume(view.Consumer, w, r, &model)
+	err := view.Consumer.In(r, &model)
 
 	if err != nil {
 		ServiceResponse(view.Producer, w, r, http.StatusBadRequest, fmt.Sprintf("Failed reading from request: %v", err))
