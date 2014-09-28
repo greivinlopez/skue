@@ -21,10 +21,7 @@
 package skue
 
 import (
-	"encoding/json"
-	"errors"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -90,42 +87,14 @@ func Produce(producer Producer, w http.ResponseWriter, r *http.Request, status i
 	producer.Out(w, status, value)
 }
 
-func Consume(consumer Consumer, w http.ResponseWriter, r *http.Request, value interface{}) {
+func Consume(consumer Consumer, w http.ResponseWriter, r *http.Request, value interface{}) error {
 	contentType := r.Header.Get(HEADER_ContentType)
 	// According to HTTP/1.1 protocol section 14.17 about Content-Type header
 	if !strings.Contains(contentType, consumer.MimeType()) {
 		w.WriteHeader(http.StatusUnsupportedMediaType)
 		io.WriteString(w, "Unsupported Media Type")
 	}
-	consumer.In(r, value)
-}
-
-// ToJson is a convenience method for writing a value in json encoding
-func ToJson(w http.ResponseWriter, statusCode int, value interface{}) {
-	output, err := json.MarshalIndent(value, " ", " ")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		io.WriteString(w, err.Error())
-	} else {
-		w.Header().Set(HEADER_ContentType, MIME_JSON)
-		w.WriteHeader(statusCode)
-		w.Write(output)
-	}
-}
-
-// FromJson checks the Accept header and reads the content into the entityPointer
-func FromJson(r *http.Request, entityPointer interface{}) error {
-	contentType := r.Header.Get(HEADER_ContentType)
-	buffer, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		return err
-	}
-	if strings.Contains(contentType, MIME_JSON) {
-		err = json.Unmarshal(buffer, entityPointer)
-	} else {
-		err = errors.New("Unable to unmarshal content of type:" + contentType)
-	}
-	return err
+	return consumer.In(r, value)
 }
 
 // ServiceResponse is a convenience function to create an http response
