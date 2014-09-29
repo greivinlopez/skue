@@ -73,7 +73,7 @@ type Consumer interface {
 }
 
 func Produce(producer Producer, w http.ResponseWriter, r *http.Request, status int, value interface{}) {
-	acceptEncoding := r.Header.Get(HEADER_AcceptEncoding)
+	acceptEncoding := r.Header.Get(HEADER_Accept)
 	// According to HTTP/1.1 protocol section 14.1 about Accept header field
 	// "If an Accept header field is present, and if the server cannot send
 	// a response which is acceptable according to the combined Accept field
