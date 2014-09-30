@@ -22,7 +22,7 @@ func (producer XmlProducer) Out(w http.ResponseWriter, statusCode int, value int
 		w.WriteHeader(http.StatusInternalServerError)
 		io.WriteString(w, err.Error())
 	} else {
-		w.Header().Set(skue.HEADER_ContentType, skue.MIME_JSON)
+		w.Header().Set(skue.HEADER_ContentType, skue.MIME_XML)
 		w.WriteHeader(statusCode)
 		w.Write(output)
 	}
@@ -32,7 +32,7 @@ type XmlConsumer struct {
 }
 
 func (consumer XmlConsumer) MimeType() string {
-	return skue.MIME_JSON
+	return skue.MIME_XML
 }
 
 func (consumer XmlConsumer) In(r *http.Request, value interface{}) error {
