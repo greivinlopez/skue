@@ -17,6 +17,20 @@ It does not force you to use a particular web server implementation or even a pa
 
 ## How it works?
 
+Let's look at the following diagram describing the architecture of the API server that you'll create with Skuë
+
+[![Diagram](http://img.shields.io/:license-mit-blue.svg)]
+
+## Credits
+
+* Tablet designed by <a href="http://www.thenounproject.com/dreamer810">Qing Li</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
+* Imac designed by <a href="http://www.thenounproject.com/sofiamoya">Sofía Moya</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
+* Import designed by <a href="http://www.thenounproject.com/howlettstudios">Christopher T. Howlett</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
+* Export designed by <a href="http://www.thenounproject.com/howlettstudios">Christopher T. Howlett</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
+* Eye designed by <a href="http://www.thenounproject.com/sergidelgado">Sergi Delgado</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
+* RAM designed by <a href="http://www.thenounproject.com/brynbodayle">Bryn Bodayle</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
+* Database designed by <a href="http://www.thenounproject.com/anton.outkine">Anton Outkine</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
+
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
 
 [![baby-gopher](https://raw2.github.com/drnic/babygopher-site/gh-pages/images/babygopher-badge.png)](http://www.babygopher.org)
