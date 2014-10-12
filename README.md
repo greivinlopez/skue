@@ -9,6 +9,12 @@ Skuë is a [Go](http://golang.org/) package intended to facilitate the creation 
 
 Skuë means **"mouse"** in [Bribrí](http://en.wikipedia.org/wiki/Bribri_language) which is the language of an indigenous group of people of [Costa Rica](https://www.youtube.com/watch?v=pNTirQ9eoLo), my Country.
 
+## How it works?
+
+Skuë is just some helper interfaces and functions working together to link separate software pieces to create the API REST-like server that you need.
+
+It does not force you to use a particular web server implementation or even a particular routing solution.  And it allows you to control the different moving parts of your API separately so you can replace them in the future if you need.
+
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
 
 [![baby-gopher](https://raw2.github.com/drnic/babygopher-site/gh-pages/images/babygopher-badge.png)](http://www.babygopher.org)
