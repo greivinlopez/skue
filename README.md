@@ -11,9 +11,9 @@ Skuë means **"mouse"** in [Bribrí](http://en.wikipedia.org/wiki/Bribri_languag
 
 ## How it works?
 
-Skuë is just some helper interfaces and functions working together to link separate software pieces to create the API REST-like server that you need.
+Skuë is just some helper interfaces and functions working together to link separate software pieces in order to create an API REST-like server.
 
-It does not force you to use a particular web server implementation or even a particular routing solution.  And it allows you to control the different moving parts of your API separately so you can replace them in the future if you need.
+It does not force you to use a particular web server implementation or even a particular routing solution.  And it allows you to control the different moving parts of your API separately so you can replace them in the future if you want to.
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
 
