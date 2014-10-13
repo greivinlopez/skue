@@ -74,7 +74,7 @@ func getResourceHandler(params martini.Params, w http.ResponseWriter, r *http.Re
 }
 ~~~
 
-In the above code `resource` represents an implementation of the `skue.DatabasePersistor`, `view` represents an implementation of `skue.ViewLayer` and `cache` represents an implementation of the `MemoryCacher` interface.
+In the above code `resource` represents an implementation of the `skue.DatabasePersistor`, `view` represents an implementation of `skue.ViewLayer` and `cache` represents an implementation of the `skue.MemoryCacher` interface.
 
 ### The view layer
 
@@ -100,6 +100,22 @@ type Consumer interface {
 ~~~
 
 Skuë provides two already implemented view layers: `XmlView` and `JSONView`.
+
+To continue with the basic example, let's consume and produce JSON format in our API:
+
+~~~ go
+import (
+	"github.com/greivinlopez/skue/views"
+)
+
+var (
+	view   skue.ViewLayer
+)
+
+func init() {
+	view = *views.NewJSONView()
+}
+~~~
 
 ## Credits
 
