@@ -45,8 +45,25 @@ So far so good. Nothing different of what you would expect of any other REST ser
 
 ### The Skuë layer
 
-Here is the place you start using the helper functions.  The most important functions you will be using are the persistance utils: skue.Create, skue.Read, skue.Update, skue.Delete and skue.List.  Through those functions you create the API by providing valid implementations of the interfaces defined by Skuë: ViewLayer, DatabasePersistor and MemoryCacher. The interface implementations as passed as parameters to the persistance functions.
+Here is the place you start using the helper functions.  The most important functions you will be using are the persistance utils:
 
+~~~
+skue.Create
+skue.Read
+skue.Update
+skue.Delete
+skue.List
+~~~ 
+
+Through those functions you create the API by providing valid implementations of the interfaces defined by Skuë: 
+
+~~~
+ViewLayer
+DatabasePersistor
+MemoryCacher
+~~~
+
+The interface implementations are passed as parameters to the persistance functions.
 
 ## Credits
 
