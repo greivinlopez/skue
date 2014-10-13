@@ -76,6 +76,31 @@ func getResourceHandler(params martini.Params, w http.ResponseWriter, r *http.Re
 
 In the above code `resource` represents an implementation of the `skue.DatabasePersistor`, `view` represents an implementation of `skue.ViewLayer` and `cache` represents an implementation of the `MemoryCacher` interface.
 
+### The view layer
+
+The view layer represents the implementation of two interfaces: `skue.Consumer` and `skue.Producer`. 
+`skue.Producer` is intended to be an encoder that writes a value to http writers for a particular MIME type.
+`skue.Consumer` is intended to be a decoder of HTTP requests that uses a particular MIME type to decode the intended object into a value.
+
+~~~ go
+type ViewLayer struct {
+	Producer Producer
+	Consumer Consumer
+}
+
+type Producer interface {
+	MimeType() string
+	Out(w http.ResponseWriter, statusCode int, value interface{})
+}
+
+type Consumer interface {
+	MimeType() string
+	In(r *http.Request, value interface{}) error
+}
+~~~
+
+Skuë provides two already implemented view layers: `XmlView` and `JSONView`.
+
 ## Credits
 
 ### Icons
