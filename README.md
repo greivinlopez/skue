@@ -117,6 +117,17 @@ func init() {
 }
 ~~~
 
+### The memory layer
+
+`skue.MemoryCacher` represents an abstraction of any memory caching system used to speed up data driven systems by caching data in RAM instead of HD.  That technique is called [caching](http://en.wikipedia.org/wiki/Cache_(computing)).
+
+There are two important details about this layer:
+
+* It's responsability of the `skue.DatabasePersistor` to interact properly with the `skue.MemoryCacher` to ensure it is actually used.
+* This layer is optional.
+
+Skuë provides an implementation of the `skue.MemoryCacher` for [Redis](http://redis.io/).
+
 ## Credits
 
 ### Icons
