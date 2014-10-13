@@ -30,6 +30,7 @@ Let's look at the following diagram describing the architecture of the API serve
 * Eye designed by <a href="http://www.thenounproject.com/sergidelgado">Sergi Delgado</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 * RAM designed by <a href="http://www.thenounproject.com/brynbodayle">Bryn Bodayle</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 * Database designed by <a href="http://www.thenounproject.com/anton.outkine">Anton Outkine</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
+* Server designed by <a href="http://www.thenounproject.com/idiotbox">Norbert Kucsera</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
 
