@@ -63,7 +63,18 @@ DatabasePersistor
 MemoryCacher
 ~~~
 
-The interface implementations are passed as parameters to the persistance functions.
+The interface implementations are passed as parameters to the persistance functions.  How this layer looks like in your server code? Let's continue with the basic example:
+
+~~~ go
+// GET a resource by id
+func getResourceHandler(params martini.Params, w http.ResponseWriter, r *http.Request) {
+	id := params["id"]
+	resource := models.NewResource(id)
+	skue.Read(view, resource, nil, w, r)
+}
+~~~
+
+In the above code the `resource` value represents an implementation of the `skue.DatabasePersistor` and the `view` value represents an implementation of the `skue.ViewLayer`.
 
 ## Credits
 
