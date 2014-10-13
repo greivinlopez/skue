@@ -43,6 +43,8 @@ func main() {
 
 ## Credits
 
+### Icons
+
 * Tablet designed by <a href="http://www.thenounproject.com/dreamer810">Qing Li</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 * Imac designed by <a href="http://www.thenounproject.com/sofiamoya">Sofía Moya</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 * Import designed by <a href="http://www.thenounproject.com/howlettstudios">Christopher T. Howlett</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
@@ -51,6 +53,7 @@ func main() {
 * RAM designed by <a href="http://www.thenounproject.com/brynbodayle">Bryn Bodayle</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 * Database designed by <a href="http://www.thenounproject.com/anton.outkine">Anton Outkine</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 * Server designed by <a href="http://www.thenounproject.com/idiotbox">Norbert Kucsera</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
+
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
 
