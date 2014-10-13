@@ -23,6 +23,24 @@ Let's look at the following diagram describing the architecture of the API serve
   <img src="https://raw.githubusercontent.com/greivinlopez/skue/master/archdiagram.png"/>
 </p>
 
+# The web server
+
+For Skuë it is of no importance what web framework or http router do you use, as long as you follow REST style you will be OK.  Let's see a basic example using [martini](https://github.com/go-martini/martini):
+
+~~~ go
+func main() {
+	m := martini.Classic()
+	
+	m.Get("/resources/:id", getResourceHandler)
+	/* This will respond with a 405 Method Not Allowed
+	   status code for an HTTP request with a method
+	   different than GET */
+	m.Any("/resources/:id", skue.NotAllowed)
+	
+	http.ListenAndServe(":3020", m)
+}
+~~~
+
 ## Credits
 
 * Tablet designed by <a href="http://www.thenounproject.com/dreamer810">Qing Li</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
