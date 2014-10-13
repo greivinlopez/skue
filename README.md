@@ -17,15 +17,15 @@ It does not force you to use a particular web server implementation or even a pa
 
 ## How it works?
 
-Let's look at the following diagram describing the architecture of the API server that you'll create with Skuë
+Let's look at the following diagram describing the architecture of the API server that you'll create with Skuë and explain each part separately
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/greivinlopez/skue/master/archdiagram.png"/>
 </p>
 
-# The web server
+### The web server
 
-For Skuë it is of no importance what web framework or http router do you use, as long as you follow REST style you will be OK.  Let's see a basic example using [martini](https://github.com/go-martini/martini):
+For Skuë it's no important what web framework or http router do you use, as long as you follow REST style you will be OK.  Let's see a basic example using [martini](https://github.com/go-martini/martini):
 
 ~~~ go
 func main() {
