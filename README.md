@@ -70,11 +70,11 @@ The interface implementations are passed as parameters to the persistance functi
 func getResourceHandler(params martini.Params, w http.ResponseWriter, r *http.Request) {
 	id := params["id"]
 	resource := models.NewResource(id)
-	skue.Read(view, resource, nil, w, r)
+	skue.Read(view, resource, cache, w, r)
 }
 ~~~
 
-In the above code the `resource` value represents an implementation of the `skue.DatabasePersistor` and the `view` value represents an implementation of the `skue.ViewLayer`.
+In the above code the `resource` value represents an implementation of the `skue.DatabasePersistor`, the `view` value represents an implementation of the `skue.ViewLayer` and the `cache` value represents an implementation of the `MemoryCacher` interface.
 
 ## Credits
 
