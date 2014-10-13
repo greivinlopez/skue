@@ -79,8 +79,8 @@ In the above code `resource` represents an implementation of the `skue.DatabaseP
 ### The view layer
 
 The view layer represents the implementation of two interfaces: `skue.Consumer` and `skue.Producer`. 
-`skue.Producer` is intended to be an encoder that writes a value to http writers for a particular MIME type.
-`skue.Consumer` is intended to be a decoder of HTTP requests that uses a particular MIME type to decode the intended object into a value.
+`skue.Producer` is intended to be an encoder that writes a value to http writers for a particular [MIME](http://en.wikipedia.org/wiki/Internet_media_type) type.
+`skue.Consumer` is intended to be a decoder of HTTP requests that uses a particular [MIME](http://en.wikipedia.org/wiki/Internet_media_type) type to decode the intended object into a value.
 
 ~~~ go
 type ViewLayer struct {
