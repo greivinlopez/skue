@@ -74,7 +74,7 @@ func getResourceHandler(params martini.Params, w http.ResponseWriter, r *http.Re
 }
 ~~~
 
-In the above code the `resource` value represents an implementation of the `skue.DatabasePersistor`, the `view` value represents an implementation of the `skue.ViewLayer` and the `cache` value represents an implementation of the `MemoryCacher` interface.
+In the above code `resource` represents an implementation of the `skue.DatabasePersistor`, `view` represents an implementation of `skue.ViewLayer` and `cache` represents an implementation of the `MemoryCacher` interface.
 
 ## Credits
 
