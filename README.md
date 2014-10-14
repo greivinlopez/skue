@@ -58,7 +58,8 @@ skue.List
 Through those functions you create the API by providing valid implementations of the interfaces defined by Skuë: 
 
 ~~~
-ViewLayer
+Consumer
+Producer
 DatabasePersistor
 MemoryCacher
 ~~~
