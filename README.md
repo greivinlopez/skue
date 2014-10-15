@@ -20,7 +20,7 @@ It does not force you to use a particular web server implementation or even a pa
 Let's look at the following diagram describing the architecture of the API server that you'll create with Skuë and explain each part separately
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/greivinlopez/skue/master/archdiagram.png"/>
+  <img src="https://raw.githubusercontent.com/greivinlopez/skue/master/assets/archdiagram.png"/>
 </p>
 
 ### The web server
