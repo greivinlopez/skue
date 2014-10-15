@@ -125,9 +125,24 @@ func init() {
 There are two important details about this layer:
 
 * It's responsability of the `skue.DatabasePersistor` to interact properly with the `skue.MemoryCacher` to ensure it is actually used.
-* This layer is optional.
+* This layer should be optional.
 
 Skuë provides an implementation of the `skue.MemoryCacher` for [Redis](http://redis.io/).
+
+Lets remove this layer from our API server example:
+
+~~~ go
+// GET a resource by id
+func getResourceHandler(params martini.Params, w http.ResponseWriter, r *http.Request) {
+	id := params["id"]
+	resource := models.NewResource(id)
+	skue.Read(view, resource, nil, w, r)
+}
+~~~
+
+If the `skue.DatabasePersistor` we are using was properly implemented then sending a nil reference instead of the `skue.MemoryCacher` should not broke anything.
+
+### The database layer
 
 ## Credits
 
