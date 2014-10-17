@@ -156,7 +156,7 @@ If the `skue.DatabasePersistor` we are using was properly implemented then sendi
 * RAM designed by <a href="http://www.thenounproject.com/brynbodayle">Bryn Bodayle</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 * Database designed by <a href="http://www.thenounproject.com/anton.outkine">Anton Outkine</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 * Server designed by <a href="http://www.thenounproject.com/idiotbox">Norbert Kucsera</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
-
+* Hard Drive designed by <a href="http://www.thenounproject.com/Eddieative">Eddie Alshehri</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
 
