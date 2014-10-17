@@ -140,7 +140,7 @@ func getResourceHandler(params martini.Params, w http.ResponseWriter, r *http.Re
 }
 ~~~
 
-If the `skue.DatabasePersistor` we are using was properly implemented then sending a nil reference instead of the `skue.MemoryCacher` should not broke anything.
+If the `skue.DatabasePersistor` its properly implemented then sending `nil` instead of the `skue.MemoryCacher` should not broke anything.
 
 ### The database layer
 
