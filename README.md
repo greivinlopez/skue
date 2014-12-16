@@ -1,7 +1,7 @@
 Skuë
 ====
 
-![logo](https://raw.githubusercontent.com/greivinlopez/skue/master/assets/logo.png)
+![logo](https://raw.githubusercontent.com/greivinlopez/skue/master/assets/300x155_logo.jpg)
 
 Skuë is a [Go](http://golang.org/) package intended to facilitate the creation of pragmatic [REST](http://en.wikipedia.org/wiki/Representational_state_transfer) APIs for Go servers.
 
