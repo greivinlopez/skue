@@ -124,12 +124,12 @@ func init() {
 
 There are two important details about this layer:
 
-* It's responsability of the `skue.DatabasePersistor` to interact properly with the `skue.MemoryCacher` to ensure it is actually used.
-* This layer should be optional.
+* It is a responsability of the `skue.DatabasePersistor` to interact properly with the `skue.MemoryCacher` to ensure it is actually used.
+* The use of this layer is completely optional.
 
 Skuë provides an implementation of the `skue.MemoryCacher` for [Redis](http://redis.io/).
 
-Lets remove this layer from our API server example:
+For simplicity purposes we will remove the memory layer from our API server example:
 
 ~~~ go
 // GET a resource by id
@@ -159,5 +159,3 @@ If the `skue.DatabasePersistor` its properly implemented then sending `nil` inst
 * Hard Drive designed by <a href="http://www.thenounproject.com/Eddieative">Eddie Alshehri</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
-
-[![baby-gopher](https://raw2.github.com/drnic/babygopher-site/gh-pages/images/babygopher-badge.png)](http://www.babygopher.org)
